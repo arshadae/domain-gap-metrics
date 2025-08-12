@@ -30,17 +30,23 @@ def build_parser():
     return p
 
 def main(argv=None):
-    # Try package-relative import first; if run as a script, fall back by adding repo root.
-    try:
-        from .orchestrator import run
-    except Exception:
-        import sys, pathlib
-        # /path/to/.../domain_gap_eval/cli.py -> parents[1] is repo root
-        sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
-        from domain_gap_eval.orchestrator import run
-
+    from orchestrator import run
+    
     args = build_parser().parse_args(argv)
     run(args)
+
+    # # Try package-relative import first; if run as a script, fall back by adding repo root.
+    # try:
+    #     from .orchestrator import run
+    # except Exception:
+    #     import sys, pathlib
+    #     # /path/to/.../domain_gap_eval/cli.py -> parents[1] is repo root
+    #     sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
+    #     from domain_gap_eval.orchestrator import run
+
+    # args = build_parser().parse_args(argv)
+    # run(args)
+
 
 if __name__ == "__main__":
     main()

@@ -18,8 +18,8 @@
     "ChiSquare_RGB_Hist": 0.0
   },
   "plots": {
-    "TSNE": "domain_gap_eval/reports/tsne_det_nogt_domain_only.png",
-    "UMAP": "domain_gap_eval/reports/umap_det_nogt_domain_only.png"
+    "TSNE": "reports/tsne_det_nogt_domain_only.png",
+    "UMAP": "reports/umap_det_nogt_domain_only.png"
   },
   "task_metrics": null,
   "notes": {

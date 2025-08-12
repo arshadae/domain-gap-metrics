@@ -1,17 +1,17 @@
 from pathlib import Path
 import json, numpy as np, torch
-from .config import seed_all, slugify
-from .notes import NOTES
-from .features.inception import InceptionFeat, featurize_paths
-from .metrics.fid_kid import compute_fid, compute_kid
-from .metrics.pad_mmd_cka import compute_pad, compute_mmd_rbf, compute_linear_cka
-from .metrics.lpips_dist import compute_lpips_set_distance
-from .metrics.hist import chi_square_rgb
-from .viz.embeddings import save_embedding_plot
-from .tasks.loader import load_user_model
-from .tasks.classification import evaluate_classification
-from .tasks.segmentation import evaluate_segmentation
-from .tasks.detection import evaluate_detection_coco
+from config import seed_all, slugify
+from notes import NOTES
+from features.inception import InceptionFeat, featurize_paths
+from metrics.fid_kid import compute_fid, compute_kid
+from metrics.pad_mmd_cka import compute_pad, compute_mmd_rbf, compute_linear_cka
+from metrics.lpips_dist import compute_lpips_set_distance
+from metrics.hist import chi_square_rgb
+from viz.embeddings import save_embedding_plot
+from tasks.loader import load_user_model
+from tasks.classification import evaluate_classification
+from tasks.segmentation import evaluate_segmentation
+from tasks.detection import evaluate_detection_coco
 
 def run(args):
     seed_all(42)

@@ -1,5 +1,5 @@
 {
-  "evaluation_name": "dummy_det_test_gt",
+  "evaluation_name": "det_nogt_domain_only",
   "num_images": {
     "A": 30,
     "B": 30
@@ -18,28 +18,10 @@
     "ChiSquare_RGB_Hist": 0.0
   },
   "plots": {
-    "TSNE": "reports/tsne_dummy_det_test_gt.png",
-    "UMAP": "reports/umap_dummy_det_test_gt.png"
+    "TSNE": "domain_gap_eval/reports/tsne_det_nogt_domain_only.png",
+    "UMAP": "domain_gap_eval/reports/umap_det_nogt_domain_only.png"
   },
-  "task_metrics": {
-    "task": "detection",
-    "COCO_metrics": {
-      "AP@[0.50:0.95]": 0.9999999999999998,
-      "AP50": 0.9999999999999999,
-      "AP75": 0.9999999999999999,
-      "AP_small": 0.9999999999999998,
-      "AP_medium": -1.0,
-      "AP_large": -1.0,
-      "AR_1": 1.0,
-      "AR_10": 1.0,
-      "AR_100": 1.0,
-      "AR_small": 1.0,
-      "AR_medium": -1.0,
-      "AR_large": -1.0
-    },
-    "num_images": 1,
-    "score_thresh": 0.0
-  },
+  "task_metrics": null,
   "notes": {
     "FID": "Fr\u00e9chet Inception Distance; lower is better. Measures distance between Gaussian fits to Inception features of the two domains. Sensitive to both mean and covariance shifts. Good for global distribution similarity.",
     "KID": "Kernel Inception Distance; mean and std shown. Polynomial kernel MMD on Inception features; unbiased and more stable on small datasets than FID. Lower is better.",

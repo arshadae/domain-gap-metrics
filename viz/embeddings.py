@@ -8,7 +8,7 @@ try:
 except Exception:
     HAS_UMAP=False
 from pathlib import Path
-from ..config import slugify
+from config import slugify
 from packaging import version
 import sklearn
 

@@ -18,8 +18,8 @@
     "ChiSquare_RGB_Hist": 0.0
   },
   "plots": {
-    "TSNE": "domain_gap_eval/reports/tsne_dummy_seg_test.png",
-    "UMAP": "domain_gap_eval/reports/umap_dummy_seg_test.png"
+    "TSNE": "reports/tsne_dummy_seg_test.png",
+    "UMAP": "reports/umap_dummy_seg_test.png"
   },
   "task_metrics": {
     "task": "segmentation",

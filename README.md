@@ -57,28 +57,28 @@ export PYTHONPATH=$(pwd)
 
 ### 1. Classification Evaluation
 ```bash
-python -m domain_gap_eval.cli \
-  --domain_a ./domain_gap_eval/dummy_data/cls \
-  --domain_b ./domain_gap_eval/dummy_data/cls \
-  --output_dir ./domain_gap_eval/reports \
+python cli.py \
+  --domain_a ./dummy_data/cls \
+  --domain_b ./dummy_data/cls \
+  --output_dir ./reports \
   --eval_name dummy_cls_test \
   --task classification \
-  --model_py ./domain_gap_eval/model_defs/model_cls.py \
-  --labels_csv ./domain_gap_eval/dummy_data/cls_labels.csv
+  --model_py ./model_defs/model_cls.py \
+  --labels_csv ./dummy_data/cls_labels.csv
 ```
 
 ---
 
 ### 2. Segmentation Evaluation
 ```bash
-python -m domain_gap_eval.cli \
-  --domain_a ./domain_gap_eval/dummy_data/seg_images \
-  --domain_b ./domain_gap_eval/dummy_data/seg_images \
-  --output_dir ./domain_gap_eval/reports \
+python cli.py \
+  --domain_a ./dummy_data/seg_images \
+  --domain_b ./dummy_data/seg_images \
+  --output_dir ./reports \
   --eval_name dummy_seg_test \
   --task segmentation \
-  --model_py ./domain_gap_eval/model_defs/model_seg.py \
-  --mask_dir ./domain_gap_eval/dummy_data/seg_masks \
+  --model_py ./model_defs/model_seg.py \
+  --mask_dir ./dummy_data/seg_masks \
   --num_classes 5
 ```
 
@@ -87,24 +87,24 @@ python -m domain_gap_eval.cli \
 ### 3. Detection Evaluation
 
 ```bash
-DGE_COCO_GT=./domain_gap_eval/dummy_data/det_coco.json \
-DGE_IMG_DIR=./domain_gap_eval/dummy_data/det_images \
-python -m domain_gap_eval.cli \
-  --domain_a ./domain_gap_eval/dummy_data/det_images \
-  --domain_b ./domain_gap_eval/dummy_data/det_images \
-  --output_dir ./domain_gap_eval/reports \
+DGE_COCO_GT=./dummy_data/det_coco.json \
+DGE_IMG_DIR=./dummy_data/det_images \
+python cli.py \
+  --domain_a ./dummy_data/det_images \
+  --domain_b ./dummy_data/det_images \
+  --output_dir ./reports \
   --eval_name dummy_det_test_gt \
   --task detection \
-  --model_py ./domain_gap_eval/model_defs/model_det.py \
-  --coco_gt ./domain_gap_eval/dummy_data/det_coco.json \
+  --model_py ./model_defs/model_det.py \
+  --coco_gt ./dummy_data/det_coco.json \
   --score_thresh 0.0
 ```
 ### 4. Task irrelevant evaluations
 ```bash 
-python -m domain_gap_eval.cli \
-  --domain_a ./domain_gap_eval/dummy_data/det_images \
-  --domain_b ./domain_gap_eval/dummy_data/det_images \
-  --output_dir ./domain_gap_eval/reports \
+python cli.py \
+  --domain_a ./dummy_data/det_images \
+  --domain_b ./dummy_data/det_images \
+  --output_dir ./reports \
   --eval_name det_nogt_domain_only
   ```
 
@@ -169,29 +169,4 @@ UMAP and t-SNE plots are saved in `reports/` to visualize domain gap.
 - Feature-level metrics alone do not guarantee equivalent task performance.
 - Always combine **feature metrics** with **task metrics** for reliable domain gap assessment.
 - Small synthetic datasets may give misleadingly high or low scores.
-
-
-### Other ways to run commands
-We provide different ways to run this repo to make it more usefull (readers may add it as a submodule in their codebase)  
-
-**From outside repo**
-```bash
-# As a module
-python -m domain_gap_eval.cli --domain_a ... --domain_b ... [args]
-python -m domain_gap_eval       --domain_a ... --domain_b ... [args]   # uses __main__.py
-
-# As a script
-python domain_gap_eval/cli.py --domain_a ... --domain_b ... [args]
-```
-
-**From inside repo**
-```bash
-# As a plin script: workds due to the fallback sys.path tweak
-python cli.py --domain_a ... --domain_b ... [args]
-
-# As a module (top-level CWD):
-python -m cli --domain_a ... --domain_b ... [args]
-
-# This will also work because cli.py adds the package’s parent to sys.path for imports
-```
 
