@@ -119,19 +119,15 @@ run_eval.sh detection
 
 ## Metrics Computed
 
-### **Feature-level metrics**
-- **FID** – Fréchet Inception Distance
-- **KID** – Kernel Inception Distance
-- **PAD** – Proxy A-distance
-- **MMD** – Maximum Mean Discrepancy
-- **CKA** – Centered Kernel Alignment
-- **LPIPS** – Perceptual similarity
-- **Chi-Square RGB Histogram**
+| **Task**           | **Required Extra Input**                                         | **Metrics Computed**                                                                                                                                             |
+| ------------------ | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Classification** | `--labels_csv` (CSV with filename + class label)                 | - **Accuracy** (overall)<br>- **Per-class Precision, Recall, F1-score**<br>- **Confusion Matrix**                                                                |
+| **Segmentation**   | `--mask_dir` (folder with segmentation masks)<br>`--num_classes` | - **Mean IoU** (mIoU)<br>- **Per-class IoU**<br>- **Pixel Accuracy**                                                                                             |
+| **Detection**      | `--coco_gt` (COCO-style JSON ground truth)                       | - **Mean Average Precision (mAP)** at IoU thresholds 0.50:0.95, 0.50, and 0.75<br>- AP for **small**, **medium**, **large** objects<br>- **Average Recall (AR)** |
+| **Any Task**       | *(No labels/masks/GT required)*                                  | - **Feature-based domain gap metrics**: FID, KID, PAD, MMD, CKA, LPIPS, RGB Histogram distance, t-SNE, UMAP                                                      |
 
-### **Task-specific metrics**
-- **Classification:** Accuracy, Precision, Recall, F1-score, Confusion matrix
-- **Segmentation:** mean IoU, per-class IoU, pixel accuracy
-- **Detection:** COCO-style mAP and AR metrics
+
+
 
 ---
 
