@@ -108,6 +108,13 @@ python cli.py \
   --eval_name det_nogt_domain_only
   ```
 
+### 5. Bash Script
+```bash
+run_eval.sh classification
+run_eval.sh segmentation
+run_eval.sh detection
+```
+
 ---
 
 ## Metrics Computed
