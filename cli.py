@@ -6,6 +6,7 @@ def build_parser():
     p = argparse.ArgumentParser(description="Domain gap evaluation for two image folders.")
     p.add_argument("--domain_a", type=str, required=True)
     p.add_argument("--domain_b", type=str, required=True)
+    p.add_argument("--domain_f", type=str, required=True)
     p.add_argument("--output_dir", type=str, default="./domain_gap_reports")
     p.add_argument("--batch_size", type=int, default=64)
     p.add_argument("--max_images", type=int, default=None)
@@ -38,3 +39,21 @@ def main(argv=None):
 
 if __name__ == "__main__":
     main()
+
+
+
+# Usecase examples:
+
+# python cli.py \
+# --domain_a ../contrastive-unpaired-translation/results/horse2zebra_AtoB_GAN1_NCE0_EDGE1/test_latest/images/real_A/ \   
+# --domain_b ../contrastive-unpaired-translation/results/horse2zebra_AtoB_GAN1_NCE0_EDGE1/test_latest/images/fake_B/ \ 
+# --output_dir ./domain_gap_reports \
+# --eval_name horse2zebra_AtoB_GAN1_NCE0_EDGE1
+
+# model=apple2orange_AtoB_GAN1_NCE0_EDGE1; \
+# base="../contrastive-unpaired-translation/results/$model/test_latest/images"; \
+# python cli.py \
+#     --domain_a "$base/real_A/" \
+#     --domain_b "$base/fake_B/" \
+#     --eval_name "$model"
+

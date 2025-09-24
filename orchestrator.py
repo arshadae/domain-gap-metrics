@@ -40,12 +40,16 @@ def run(args):
 
     paths_a = list_images(args.domain_a, args.max_images)
     paths_b = list_images(args.domain_b, args.max_images)
-    if not paths_a or not paths_b:
-        raise RuntimeError("No images found. Check --domain_a/--domain_b and extensions.")
+    paths_f = list_images(args.domain_f, args.max_images)
+
+    if not paths_a or not paths_b or not paths_f:
+        raise RuntimeError("No images found. Check --domain_a/--domain_b/--domain_f and extensions.")
 
     print('Running domain gap evaluations on device:', device)
     print(f"Domain A: {len(paths_a)} images from {args.domain_a}")
     print(f"Domain B: {len(paths_b)} images from {args.domain_b}")
+    print(f"Domain F: {len(paths_f)} images from {args.domain_f}")
+
 
     # -------- features & stats --------
     print("Extracting features for domain A...")
@@ -55,16 +59,20 @@ def run(args):
     print("Extracting features for domain B...")
     feats_b = fid_score.get_activations(paths_b, model, args.batch_size, dims, device, 1)
     muB, sigB = np.mean(feats_b, axis=0), np.cov(feats_b, rowvar=False)
+
+    print("Extracting features for domain F...")
+    feats_f = fid_score.get_activations(paths_f, model, args.batch_size, dims, device, 1)
+    muF, sigF = np.mean(feats_f, axis=0), np.cov(feats_f, rowvar=False)
     print("Feature extraction done.")
 
     # -------- FID --------
     print("Computing FID ...")
-    fid = fid_score.calculate_frechet_distance(muA, sigA, muB, sigB)
+    fid = fid_score.calculate_frechet_distance(muF, sigF, muB, sigB)
 
     # -------- KID (poly/MMD-GAN style) --------
     print("Computing KID (MMD2 with polynomial kernel) ...")
     kid_mean, kid_std = kid_from_features_mmdgan(
-        feats_a, feats_b,
+        feats_f, feats_b,
         subsets=100, subset_size=1000,
         seed=123, device=None, dtype=None
     )
@@ -72,30 +80,30 @@ def run(args):
     # -------- MMD2 (RBF) --------
     print("Computing MMD2 with RBF kernel (multi-sigma) ...")
     mmd2, mmd2_std = mmd2_rbf_from_features(
-        feats_a, feats_b,
+        feats_f, feats_b,
         sigmas="auto-median-x{0.5,1,2,4,8}",
         subsets=100, subset_size=1000,
         seed=123, device=None, dtype=torch.float64
     )
-    print("MMD2_RBF:", mmd2, "(±" + f"{mmd2_std:.6g}" + ")" if mmd2_std is not None else "")
+    # print("MMD2_RBF:", mmd2, "(±" + f"{mmd2_std:.6g}" + ")" if mmd2_std is not None else "")
 
     print("Computing MMD2 with fixed sigmas ...")
     mmd2_fixed_sigma, _ = mmd2_rbf_from_features(
-        feats_a, feats_b,
+        feats_f, feats_b,
         sigmas=[10.0, 20.0, 40.0, 80.0],
         subsets=1, subset_size=None
     )
 
     print("Computing MMD2 with single auto-median sigma ...")
     mmd2_single_bw, _ = mmd2_rbf_from_features(
-        feats_a, feats_b,
+        feats_f, feats_b,
         sigmas="auto-median",
         subsets=1, subset_size=None
     )
 
     # -------- LPIPS (set-to-set) --------
     print("Computing LPIPS set-to-set distance...")
-    lpips_val = compute_lpips_set_distance(paths_a, paths_b,
+    lpips_val = compute_lpips_set_distance(paths_f, paths_b,
                                            sample_pairs=args.lpips_pairs,
                                            device=device) if getattr(args, "lpips", True) else None
 
@@ -103,7 +111,7 @@ def run(args):
     # Paper-faithful PAD via linear domain classifier on frozen features
     print("Computing Proxy A-distance (PAD) on Inception features...")
     pad_res = compute_pad(
-        feats_a, feats_b,
+        feats_f, feats_b,
         clf="logreg",        # or "linsvm"
         C=1.0,
         norm="zscore",
@@ -115,7 +123,7 @@ def run(args):
     pad, pad_std = pad_res.pad_mean, pad_res.pad_std
     dom_acc, dom_acc_std = pad_res.acc_mean, pad_res.acc_std
     pad_symmetric = pad  # mapping already enforces symmetry
-    print(f"PAD: {pad:.6f} ± {pad_std:.6f}  |  Acc: {dom_acc:.4f} ± {dom_acc_std:.4f}")
+    # print(f"PAD: {pad:.6f} ± {pad_std:.6f}  |  Acc: {dom_acc:.4f} ± {dom_acc_std:.4f}")
 
     # -------- SSIM (Structural Similarity Index Matrix) --------
     print("Computing SSIM on paired images...")
@@ -125,20 +133,20 @@ def run(args):
     ssim_csv     = getattr(args, "ssim_csv", None)
 
     ssim_res = compute_ssim_dirs(
-        Path(args.domain_a), Path(args.domain_b),
+        Path(args.domain_a), Path(args.domain_f),
         pairing=ssim_pairing, mode=ssim_mode,
         resize_b_to_a=ssim_resize, save_csv=ssim_csv
     )
-    print(f"SSIM ({ssim_res['mode']} / {ssim_res['pairing']}): "
-        f"{ssim_res['mean']:.6f} ± {ssim_res['std']:.6f} over {ssim_res['pairs']} pairs")
+    # print(f"SSIM ({ssim_res['mode']} / {ssim_res['pairing']}): "
+    #     f"{ssim_res['mean']:.6f} ± {ssim_res['std']:.6f} over {ssim_res['pairs']} pairs")
 
 
 
     # -------- Embedding plots --------
     print("Saving embedding plots (this may take a while for large sets)...")
-    tsne_file = save_embedding_plot(feats_a, feats_b, out / "tsne.png",
+    tsne_file = save_embedding_plot(feats_a, feats_f, feats_b, out / "tsne.png",
                                     method="tsne", name_suffix=args.eval_name)
-    umap_file = save_embedding_plot(feats_a, feats_b, out / "umap.png",
+    umap_file = save_embedding_plot(feats_a, feats_f, feats_b, out / "umap.png",
                                     method="umap", name_suffix=args.eval_name)
     print(f"TSNE plot saved to {tsne_file}")
     if umap_file: print(f"UMAP plot saved to {umap_file}")

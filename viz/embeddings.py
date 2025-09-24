@@ -12,9 +12,9 @@ from config import slugify
 from packaging import version
 import sklearn
 
-def save_embedding_plot(feats_a, feats_b, out_png, method="tsne", name_suffix=None):
-    X = np.vstack([feats_a, feats_b])
-    y = np.array([0]*len(feats_a) + [1]*len(feats_b))
+def save_embedding_plot(feats_a, feats_f, feats_b, out_png, method="tsne", name_suffix=None):
+    X = np.vstack([feats_a, feats_f, feats_b])
+    y = np.array([0]*len(feats_a) + [1]*len(feats_f) + [2]*len(feats_b))
     Xp = PCA(n_components=min(50, X.shape[1]), random_state=42).fit_transform(X)
     if method == "umap" and HAS_UMAP:
         Z = umap.UMAP(n_components=2, random_state=42, n_neighbors=30, min_dist=0.1, n_jobs=1).fit_transform(Xp)
@@ -27,6 +27,7 @@ def save_embedding_plot(feats_a, feats_b, out_png, method="tsne", name_suffix=No
     plt.figure(figsize=(6,5))
     plt.scatter(Z[y==0,0], Z[y==0,1], s=6, alpha=0.6, label="Domain A")
     plt.scatter(Z[y==1,0], Z[y==1,1], s=6, alpha=0.6, label="Domain B")
+    plt.scatter(Z[y==2,0], Z[y==2,1], s=6, alpha=0.6, label="Domain F")
     plt.legend(); plt.title(f"{method.upper()} of Inception Features"); plt.tight_layout()
 
     out_png = Path(out_png)

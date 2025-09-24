@@ -3,5 +3,7 @@ domain_gap_reports
 
 # Ignore all Python bytecode files
 __pycache__/
+**/__pycache__/
 *.py[cod]
 *$py.class
+
