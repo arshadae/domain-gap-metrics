@@ -46,14 +46,16 @@ if __name__ == "__main__":
 
 # python cli.py \
 # --domain_a ../contrastive-unpaired-translation/results/horse2zebra_AtoB_GAN1_NCE0_EDGE1/test_latest/images/real_A/ \   
-# --domain_b ../contrastive-unpaired-translation/results/horse2zebra_AtoB_GAN1_NCE0_EDGE1/test_latest/images/fake_B/ \ 
+# --domain_f ../contrastive-unpaired-translation/results/horse2zebra_AtoB_GAN1_NCE0_EDGE1/test_latest/images/fake_B/ \   
+# --domain_b ../contrastive-unpaired-translation/results/horse2zebra_AtoB_GAN1_NCE0_EDGE1/test_latest/images/real_B/ \ 
 # --output_dir ./domain_gap_reports \
 # --eval_name horse2zebra_AtoB_GAN1_NCE0_EDGE1
 
-# model=apple2orange_AtoB_GAN1_NCE0_EDGE1; \
+# model=horse2zebra_AtoB_GAN1_NCE1_EDGE1; \
 # base="../contrastive-unpaired-translation/results/$model/test_latest/images"; \
 # python cli.py \
-#     --domain_a "$base/real_A/" \
-#     --domain_b "$base/fake_B/" \
-#     --eval_name "$model"
-
+# --domain_a "$base/real_A/" \
+# --domain_f "$base/fake_B" \
+# --domain_b "$base/real_B/" \
+# --output_dir "./domain_gap_reports" \
+# --eval_name "$model"
