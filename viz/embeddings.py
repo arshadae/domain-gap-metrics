@@ -17,7 +17,7 @@ def save_embedding_plot(feats_a, feats_b, out_png, method="tsne", name_suffix=No
     y = np.array([0]*len(feats_a) + [1]*len(feats_b))
     Xp = PCA(n_components=min(50, X.shape[1]), random_state=42).fit_transform(X)
     if method == "umap" and HAS_UMAP:
-        Z = umap.UMAP(n_components=2, random_state=42, n_neighbors=30, min_dist=0.1).fit_transform(Xp)
+        Z = umap.UMAP(n_components=2, random_state=42, n_neighbors=30, min_dist=0.1, n_jobs=1).fit_transform(Xp)
     else:
         kws = dict(n_components=2, init="pca", random_state=42, perplexity=min(30, max(5, (len(X)//50))))
         if version.parse(sklearn.__version__) >= version.parse("1.2"): kws["max_iter"]=1000

@@ -8,7 +8,7 @@
   "metrics": {
     "FID": 0.0,
     "KID_mean": 0.0,
-    "KID_std": 6.645733228632082e-08,
+    "KID_std": 1.2439864797964664e-07,
     "PAD": 0.0,
     "PAD_symmetric": 0.0,
     "DomainClassifierAccuracy": 0.2777777777777778,

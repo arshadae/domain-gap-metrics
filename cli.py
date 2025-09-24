@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# domain_gap_eval/cli.py
 
 import argparse
 
@@ -7,12 +6,12 @@ def build_parser():
     p = argparse.ArgumentParser(description="Domain gap evaluation for two image folders.")
     p.add_argument("--domain_a", type=str, required=True)
     p.add_argument("--domain_b", type=str, required=True)
-    p.add_argument("--output_dir", type=str, default="./domain_gap_report")
-    p.add_argument("--batch_size", type=int, default=32)
+    p.add_argument("--output_dir", type=str, default="./domain_gap_reports")
+    p.add_argument("--batch_size", type=int, default=64)
     p.add_argument("--max_images", type=int, default=None)
     p.add_argument("--cpu", action="store_true")
     p.add_argument("--lpips", action="store_true")
-    p.add_argument("--lpips_pairs", type=int, default=500)
+    p.add_argument("--lpips_pairs", type=int, default=50)
     p.add_argument("--eval_name", type=str, default=None)
     p.add_argument("--task", choices=["classification", "segmentation", "detection"])
     p.add_argument("--model_py", type=str)
@@ -35,17 +34,6 @@ def main(argv=None):
     args = build_parser().parse_args(argv)
     run(args)
 
-    # # Try package-relative import first; if run as a script, fall back by adding repo root.
-    # try:
-    #     from .orchestrator import run
-    # except Exception:
-    #     import sys, pathlib
-    #     # /path/to/.../domain_gap_eval/cli.py -> parents[1] is repo root
-    #     sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
-    #     from domain_gap_eval.orchestrator import run
-
-    # args = build_parser().parse_args(argv)
-    # run(args)
 
 
 if __name__ == "__main__":

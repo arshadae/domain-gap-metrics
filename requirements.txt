@@ -31,8 +31,8 @@ ujson>=5.0.0
 openTSNE>=0.6.0
 
 
-# klpips is optional — install it only if you want LPIPS metric (--lpips flag).
-# ujson is also optional — but helps speed up COCO JSON loading.
+# lpips is optional — install it only if you want LPIPS metric (--lpips flag).
+# json is also optional — but helps speed up COCO JSON loading.
 # openTSNE is only needed if you want to use a faster t-SNE than sklearn’s.
 
 # pip install -r requirements.txt
